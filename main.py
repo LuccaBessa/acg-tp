@@ -60,8 +60,11 @@ if __name__ == "__main__":
     for i in range(length-1):
         for j in range(i+1, length):
             if (matrix[students[i]['researchId']][students[j]['researchId']] != -1):
-                g[i]
+                # criar aresta com a com da matriz como peso
+                print('a')
             else:
-                connect(g, g[i], g[j], matrix[students[j]['researchId']][students[i]['researchId']]);
+                # criar aresta com a pos da matriz invertida
+                print('b')
+
 
     print(g)
