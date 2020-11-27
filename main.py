@@ -1,15 +1,15 @@
-import math
 class Vertex:
     def __init__(self, id):
-        self.id = str(id)
+        self.id = id
+        self.pi = None
         self.neighbors = []
         self.edges = {}
 
     def addNeighbor(self, vertex):
         self.neighbors.append(vertex)
 
-    def addEdge(self, vertex, weight):
-        self.edges[vertex.id] = weight
+    def addEdge(self, id, weight):
+        self.edges[id] = weight
 
 def ReadStudents(file):
         f = open(file, 'r');
@@ -45,11 +45,11 @@ def ReadMatrix(file):
 
     return matrix;
 
-def prim(graph: list, root: Vertex) -> list:
+def prim(graph, root):
 
     a = []
     for u in graph:
-        u.key = math.inf
+        u.key = float('inf')
         u.pi = None
 
     root.key = 0
@@ -63,8 +63,9 @@ def prim(graph: list, root: Vertex) -> list:
                 v.pi = u
                 v.key = u.edges[v.id]
 
-    for i in range(1, len(graph)):
-        a.append((int(graph[i].id) + 1, int(graph[i].pi.id) + 1))
+    for i in graph:
+        print(i)
+        a.append((i.id + 1, i.pi.id + 1))
 
     return a
 
@@ -78,18 +79,16 @@ if __name__ == "__main__":
         v = Vertex(s['key'])
         g.append(v)
 
-    print(g)
-
     length = len(g)
-    for i in range(length-1):
-        for j in range(i+1, length):
-            if (matrix[students[i]['researchId']][students[j]['researchId']] != -1):
-                # criar aresta com a com da matriz como peso
-                print('a')
-            else:
-                # criar aresta com a pos da matriz invertida
-                print('b')
+    for i in range(length):
+        for j in range(length):
+            if(i != j):
+                if (matrix[students[i]['researchId']][students[j]['researchId']] != -1):
+                    g[i].addNeighbor(Vertex(j))
+                    g[i].addEdge(j, matrix[students[i]['researchId']][students[j]['researchId']])
+                else:
+                    g[i].addNeighbor(Vertex(j))
+                    g[i].addEdge(j, matrix[students[j]['researchId']][students[i]['researchId']])
 
     
     prim(g, g[0])
-    print(g)
