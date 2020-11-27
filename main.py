@@ -1,3 +1,4 @@
+import math
 class Vertex:
     def __init__(self, id):
         self.id = str(id)
@@ -44,6 +45,29 @@ def ReadMatrix(file):
 
     return matrix;
 
+def prim(graph: list, root: Vertex) -> list:
+
+    a = []
+    for u in graph:
+        u.key = math.inf
+        u.pi = None
+
+    root.key = 0
+    q = graph[:]
+
+    while q:
+        u = min(q)
+        q.remove(u)
+        for v in u.neighbors:
+            if (v in q) and (u.edges[v.id] < v.key):
+                v.pi = u
+                v.key = u.edges[v.id]
+
+    for i in range(1, len(graph)):
+        a.append((int(graph[i].id) + 1, int(graph[i].pi.id) + 1))
+
+    return a
+
 if __name__ == "__main__":
 
     students = ReadStudents('alunos.txt');
@@ -66,5 +90,6 @@ if __name__ == "__main__":
                 # criar aresta com a pos da matriz invertida
                 print('b')
 
-
+    
+    prim(g, g[0])
     print(g)
