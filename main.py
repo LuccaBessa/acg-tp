@@ -2,6 +2,7 @@ class Vertex:
     def __init__(self, id):
         self.id = id
         self.pi = None
+        self.key = None
         self.neighbors = []
         self.edges = {}
 
@@ -10,6 +11,11 @@ class Vertex:
 
     def addEdge(self, id, weight):
         self.edges[id] = weight
+
+    def __lt__(self, other):
+        """Comparison rule to < operator."""
+        return self.key < other.key
+    
 
 def ReadStudents(file):
         f = open(file, 'r');
@@ -64,7 +70,6 @@ def prim(graph, root):
                 v.key = u.edges[v.id]
 
     for i in graph:
-        print(i)
         a.append((i.id + 1, i.pi.id + 1))
 
     return a
