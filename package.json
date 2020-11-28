@@ -1,0 +1,25 @@
+{
+    "name": "acg-tp",
+    "version": "1.0.0",
+    "description": "Trabalho Pratico de Algoritmos Computacionais em Grafos",
+    "main": "index.ts",
+    "scripts": {
+        "start": "npx ts-node index.ts",
+        "test": "echo 'Não existem testes'"
+    },
+    "repository": {
+        "type": "git",
+        "url": "none"
+    },
+    "keywords": [
+        "grafos"
+    ],
+    "author": "Lucca Bessa",
+    "license": "MIT",
+    "dependencies": {
+        "babel": "^6.23.0",
+        "javascript-priority-queue": "^1.0.0",
+        "typescript": "^4.1.0-beta"
+    },
+    "devDependencies": {}
+}
