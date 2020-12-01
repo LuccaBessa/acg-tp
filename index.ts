@@ -3,11 +3,12 @@ import Grafo from './src/Grafo';
 import LerArquivo from './src/LerArquivo';
 import Vertice from './src/Vertice';
 import { prim } from './src/Prim';
-
+import divisorGrupos from './src/DivisorGrupos';
 
 let g = new Grafo();
 let ler = new LerArquivo();
 let arvGerMin = new Grafo();
+let grupos: Vertice[][];
 
 let alunos = ler.lerAlunos('alunos');
 let matriz = ler.lerDissimilaridade('dissimilaridade');
@@ -34,3 +35,7 @@ arvGerMin = prim(g, g.getAllVertices()[0]);
 
 console.log('arvGerMin: vertices', arvGerMin.getAllVertices());
 console.log('arvGerMin: arestas', arvGerMin.getAllArestas());
+
+grupos = divisorGrupos(arvGerMin);
+
+console.log('Grupos: \n', grupos);

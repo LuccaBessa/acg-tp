@@ -2,8 +2,8 @@ import Vertice from './Vertice';
 import Aresta from './Aresta';
 
 export default class Grafo {
-    vertices: Vertice[];
-    arestas: Aresta[];
+    private vertices: Vertice[];
+    private arestas: Aresta[];
 
     constructor() {
         this.vertices = [];
@@ -14,6 +14,10 @@ export default class Grafo {
         this.vertices[novoVertice.key] = novoVertice;
 
         return this;
+    }
+
+    removeVertice(verticieKey: number) {
+        this.vertices = this.vertices.filter((vertice: Vertice) => vertice.key != verticieKey);
     }
 
     getVerticeByKey(verticeKey: number) {
@@ -30,6 +34,10 @@ export default class Grafo {
 
     getArestasByVerticeInicial(verticeKey: number) {
         return this.arestas.filter((a) => a.verticeInicial.key == verticeKey);
+    }
+
+    getArestasByVerticeFinal(verticeKey: number) {
+        return this.arestas.filter((a) => a.verticeFinal.key == verticeKey);
     }
 
     getArestaByVerticeInicialAndVerticeFinal(verticeInicialKey: number, verticeFinalKey: number) {
@@ -57,5 +65,9 @@ export default class Grafo {
         }
 
         return this;
+    }
+
+    removeAresta(arestaKey: number) {
+        this.arestas = this.arestas.filter((aresta: Aresta) => aresta.key != arestaKey);
     }
 }
