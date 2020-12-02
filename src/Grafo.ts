@@ -10,6 +10,13 @@ export default class Grafo {
         this.arestas = [];
     }
 
+    updatePred(verticeKey: number, predecessor: number){
+        this.vertices = this.vertices.map((vertice)=>{
+            if(vertice.key == verticeKey) vertice.pred = predecessor;
+            return vertice
+        })
+    }
+
     addVertice(novoVertice: Vertice) {
         this.vertices[novoVertice.key] = novoVertice;
 
@@ -38,6 +45,10 @@ export default class Grafo {
 
     getArestasByVerticeFinal(verticeKey: number) {
         return this.arestas.filter((a) => a.verticeFinal.key == verticeKey);
+    }
+
+    getArestasByVertice(verticeKey: number){
+        return this.arestas.filter((a) => (a.verticeFinal.key == verticeKey) || a.verticeInicial.key == verticeKey);
     }
 
     getArestaByVerticeInicialAndVerticeFinal(verticeInicialKey: number, verticeFinalKey: number) {
