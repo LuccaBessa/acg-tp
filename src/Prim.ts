@@ -1,86 +1,64 @@
 import Grafo from './Grafo';
-import Vertice from './Vertice';
-import Aresta from './Aresta';
 import { MinPriorityQueue } from '@datastructures-js/priority-queue';
+import Aresta from './Aresta';
 
-const comparator = function (a: any, b: any) {
-    return a.priority < b.priority;
-};
-const comparator2 = function (a: any, b: any) {
-    return a.priority < b.priority? 0 : 1 ;
-};
-
-
-export function prim(grafo: Grafo, comeco: Vertice) {
-    const distancia: number[] = [];
-    const verticesAnteriores: number[] = [];
+export function prim(grafo: Grafo) {
     let priorityQueue = new MinPriorityQueue();
+    let auxPriorityQueue = new MinPriorityQueue();
     const arvGeradoraMin = new Grafo();
-    const arvMinList: any[] = [];
-    function updateHeap(vertice: any) {
-        const listAux = new MinPriorityQueue()
-        while(!priorityQueue.isEmpty()){
-            const removed: any = priorityQueue.dequeue();
-            if(removed.element == vertice.key){
-                listAux.enqueue(vertice.key, vertice.priority);
-            } else{
-                listAux.enqueue(removed.element, removed.priority);
+    let i = 0;
+
+    function updateHeap(pq: any, vertice: any) {
+        const listAux = new MinPriorityQueue();
+        while (!pq.isEmpty()) {
+            const removed: any = pq.dequeue();
+            if (removed.element.key == vertice.key) {
+                listAux.enqueue(vertice, vertice.dist);
+            } else {
+                listAux.enqueue(removed.element, removed.element.dist);
             }
         }
-        
-        priorityQueue = listAux;
+
+        return listAux;
     }
 
     grafo.getAllVertices().forEach((vertice) => {
-        arvGeradoraMin.addVertice(vertice);
-        distancia[vertice.key] = vertice === comeco ? 0 : Infinity;
-        verticesAnteriores[vertice.key] = -1;
-        priorityQueue.enqueue(vertice.key, distancia[vertice.key]);
-    });
-    const verticeList = [];
-    // Updating 'distancia' object
-    while (!priorityQueue.isEmpty()) {
-        const vertice : any = priorityQueue.dequeue();
-        arvMinList.push(vertice)
-        console.log(vertice)
-        if (vertice != undefined) {
-            grafo.getArestasByVertice(vertice.element).forEach((vizinho) => {
-                const vizinhoAtual = vizinho.verticeFinal.key != vertice.element? vizinho.verticeFinal: vizinho.verticeInicial;
-                let distanciaAtual: number;
-                if () {
-                    distancia[vizinhoAtual.key] = distancia[vertice.element] + grafo.getArestaByVerticeInicialAndVerticeFinal(vertice.element, vizinhoAtual.key).peso;
-                    verticesAnteriores[vizinhoAtual.key] = vertice.element;
-                    arvGeradoraMin.updatePred(vizinhoAtual.key, vertice.element)
-                    updateHeap({key: vizinhoAtual.key, priority: distancia[vizinhoAtual.key]});
-                }
-            });
+        if (i == 0) {
+            vertice.dist = 0;
         }
+        arvGeradoraMin.addVertice(vertice);
+        priorityQueue.enqueue(vertice, vertice.dist);
+        auxPriorityQueue.enqueue(vertice, vertice.dist);
+        i++;
+    });
+
+    while (!priorityQueue.isEmpty()) {
+        const vertice: any = priorityQueue.dequeue();
+        grafo.getArestasByVertice(vertice.element.key).forEach((aresta) => {
+            let nextVert = aresta.verticeFinal.key != vertice.element.key ? aresta.verticeFinal : aresta.verticeInicial;
+            let newCost = aresta.peso;
+            let constains = false;
+
+            priorityQueue.toArray().forEach((e: any) => {
+                if (e.element == nextVert) constains = true;
+            });
+
+            if (constains && newCost < nextVert.dist) {
+                nextVert.pred = vertice.element.key;
+                nextVert.dist = newCost;
+                priorityQueue = updateHeap(priorityQueue, nextVert);
+                auxPriorityQueue = updateHeap(auxPriorityQueue, nextVert);
+            }
+        });
     }
 
-    newCost = currentVert.getWeight(nextVert)
-          if nextVert in pq and newCost<nextVert.getDistance():
-              nextVert.setPred(currentVert)
-              nextVert.setDistance(newCost)
-              pq.decreaseKey(nextVert,newCost)
-
-
-    console.log(arvGeradoraMin)
-    console.log(distancia)
-    let index: number = 0;
-    // verticesAnteriores.forEach((vertice: number) => {
-
-    //     if (vertice && verticesAnteriores[vertice]) {
-    //         arvGeradoraMin.addAresta(new Aresta(index, grafo.getVerticeByKey(vertice), grafo.getVerticeByKey(verticesAnteriores[vertice]), 0));
-    //         index++;
-    //     }
-    // });
-
-    // arvMinList.forEach (()=>{
-    //     if (vertice && verticesAnteriores[vertice]) {
-    //         arvGeradoraMin.addAresta(new Aresta(index, grafo.getVerticeByKey(vertice), grafo.getVerticeByKey(verticesAnteriores[vertice]), 0));
-    //         index++;
-    //     }
-    // })
+    i = 0;
+    auxPriorityQueue.toArray().forEach((e: any) => {
+        if (e.element.pred != null) {
+            arvGeradoraMin.addAresta(new Aresta(i, grafo.getVerticeByKey(e.element.pred), grafo.getVerticeByKey(e.element.key), e.priority));
+            i++;
+        }
+    });
 
     return arvGeradoraMin;
 }

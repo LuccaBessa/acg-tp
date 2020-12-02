@@ -30,11 +30,8 @@ for (let i = 0; i < allVertices.length - 1; i++) {
         index++;
     }
 }
-arvGerMin = prim(g, g.getAllVertices()[0]);
+arvGerMin = prim(g);
 
-console.log('arvGerMin: vertices', arvGerMin.getAllVertices());
-console.log('arvGerMin: arestas', arvGerMin.getAllArestas());
-
-// grupos = divisorGrupos(arvGerMin, 3);
+grupos = divisorGrupos(arvGerMin, 3);
 
 console.log('Grupos: \n', grupos);
